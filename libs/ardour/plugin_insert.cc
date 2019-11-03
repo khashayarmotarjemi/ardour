@@ -59,6 +59,10 @@
 #include "ardour/mac_vst_plugin.h"
 #endif
 
+#ifdef VST3_SUPPORT
+#include "ardour/vst3_plugin.h"
+#endif
+
 #ifdef AUDIOUNIT_SUPPORT
 #include "ardour/audio_unit.h"
 #endif
@@ -1409,6 +1413,9 @@ PluginInsert::plugin_factory (boost::shared_ptr<Plugin> other)
 #ifdef MACVST_SUPPORT
 	boost::shared_ptr<MacVSTPlugin> mvp;
 #endif
+#ifdef VST3_SUPPORT
+	boost::shared_ptr<VST3Plugin> vst3;
+#endif
 #ifdef AUDIOUNIT_SUPPORT
 	boost::shared_ptr<AUPlugin> ap;
 #endif
@@ -1432,6 +1439,10 @@ PluginInsert::plugin_factory (boost::shared_ptr<Plugin> other)
 #ifdef MACVST_SUPPORT
 	} else if ((mvp = boost::dynamic_pointer_cast<MacVSTPlugin> (other)) != 0) {
 		return boost::shared_ptr<Plugin> (new MacVSTPlugin (*mvp));
+#endif
+#ifdef VST3_SUPPORT
+	} else if ((vst3 = boost::dynamic_pointer_cast<VST3Plugin> (other)) != 0) {
+		return boost::shared_ptr<Plugin> (new VST3Plugin (*vst3));
 #endif
 #ifdef AUDIOUNIT_SUPPORT
 	} else if ((ap = boost::dynamic_pointer_cast<AUPlugin> (other)) != 0) {
