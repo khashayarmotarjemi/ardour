@@ -810,9 +810,10 @@ VSTPlugin::has_editor () const
 }
 
 bool
-VSTPlugin::print_parameter (uint32_t param, char *buf, uint32_t len) const
+VSTPlugin::print_parameter (uint32_t param, std::string& rv) const
 {
-	char *first_nonws;
+	char buf[64];
+	size_t len = sizeof(buf);
 	assert (len > VestigeMaxShortLabelLen);
 	memset (buf, 0, len);
 
@@ -824,16 +825,15 @@ VSTPlugin::print_parameter (uint32_t param, char *buf, uint32_t len) const
 
 	buf[len - 1] = '\0';
 
-	first_nonws = buf;
+	char* first_nonws = buf;
 	while (*first_nonws && isspace (*first_nonws)) {
-		first_nonws++;
+		++first_nonws;
 	}
 
 	if (*first_nonws == '\0') {
 		return false;
 	}
-
-	memmove (buf, first_nonws, strlen (buf) - (first_nonws - buf) + 1);
+	rv = std::string (first_nonws);
 	return true;
 }
 
